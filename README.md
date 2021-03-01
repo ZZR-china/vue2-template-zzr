@@ -1,4 +1,4 @@
-# newdemo
+# vue2-template-zzr
 
 ## Project setup
 ```
