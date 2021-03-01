@@ -32,3 +32,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## svg icon
+引入svg icon
+svgo库：优化svg，将svg代码转化为.svg格式文件
