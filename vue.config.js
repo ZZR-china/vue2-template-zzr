@@ -1,39 +1,50 @@
+'use strict'
 const path = require('path')
+const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
+
+const name = defaultSettings.title || ''
 const FileManagerPlugin = require('filemanager-webpack-plugin')
 
 module.exports = {
   configureWebpack: () => {
-    if (process.env.NODE_ENV === 'production') {
-      return {
-        externals: {
-          AMap: 'AMap'
-        },
-        plugins: [
-          new FileManagerPlugin({
+    return {
+      name: name,
+      resolve: {
+        alias: {
+          '@': resolve('src')
+        }
+      },
+      externals: {
+        AMap: 'AMap'
+      },
+      plugins: [
+        new FileManagerPlugin({
+          events: {
             onEnd: {
               delete: [
                 './dist.zip'
               ],
               archive: [{
                 source: './dist',
-                destination: './dist.zip'
+                destination: './dist.zip',
+                options: {
+                  gzip: true,
+                  gzipOptions: {
+                    level: 1
+                  },
+                  globOptions: {
+                    nomount: true
+                  }
+                }
               }]
             }
-          })
-        ],
-        performance: {
-          hints: false
-        }
-      }
-    }
-    return {
-      externals: {
-        AMap: 'AMap'
-      }
+          }
+        })
+      ]
     }
   },
 
@@ -44,19 +55,11 @@ module.exports = {
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
 
-    config.resolve.alias
-      .set('@', resolve('src'))
-      .set('assets', resolve('src/assets'))
-      .set('components', resolve('src/components'))
-      .set('base', resolve('baseConfig'))
-      .set('public', resolve('public'))
-
     // set svg-sprite-loader
     config.module
       .rule('svg')
       .exclude.add(resolve('src/icons'))
       .end()
-
     config.module
       .rule('icons')
       .test(/\.svg$/)
@@ -82,8 +85,7 @@ module.exports = {
   devServer: {
     port: 8083,
     proxy: {
-      '/api': {
-        // 测试环境 2
+      [process.env.VUE_APP_BASE_API]: {
         target: 'http://135.173.12.30:9080/portal',
         changeOrigin: true,
         ws: true,
@@ -92,6 +94,7 @@ module.exports = {
         }
       }
     },
+    after: require('./mock/mock-server.js'),
     https: false
   }
 }
