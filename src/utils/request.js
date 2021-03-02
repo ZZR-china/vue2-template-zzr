@@ -1,8 +1,6 @@
 import axios from 'axios'
 
 // create an axios instance
-console.log(process.env)
-
 const service = axios.create({
   // url = base url + request url
   baseURL: process.env.VUE_APP_ENV === 'mock' ? process.env.VUE_APP_MOCK_API : process.env.VUE_APP_BASE_API,
