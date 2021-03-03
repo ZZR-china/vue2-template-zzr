@@ -51,3 +51,6 @@ mock数据，无后端开发时使用
 
 ## axios
 ajax请求库
+
+## tailwindcss
+https://tailwindcss.com/
