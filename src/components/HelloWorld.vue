@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <button @click="changeTest">111</button>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -41,6 +42,16 @@ export default {
     msg: {
       type: String,
       default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    }
+  },
+  methods: {
+    changeTest() {
+      this.title = 1
+      console.log('title', this.title)
     }
   }
 }
